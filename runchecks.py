@@ -1,28 +1,19 @@
 #!/usr/bin/python2
-import os
-import sys
-import urllib
-import urllib2
-import json
-import time
-import twilio.rest
 
-import settings
-
-services = settings.SERVICES
+services = Services()
 
 services = Build_Services(services)
 for service in services:
+  if not service.problem:
+    status = service.check()
+    if status.issue:
+      service.problem = status.issue
   if service.problem:
     problem = service.problem
     if not problem.acknowledged:
       problem.start_notify()
-    else:
-      status = service.check()
-      if not status.issue:
-        problem.end
-  else:
     status = service.check()
-    if status.issue():
-      service.problem = status.issue()
+    if not status.issue:
+      problem.end()
+
 

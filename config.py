@@ -2,9 +2,9 @@ import os
 import sys
 import time
 
-
+# Find dirname of project directory
 mod_full = os.path.abspath(__file__)
-mod_dirname = os.path.dirname(path)
+mod_dirname = os.path.dirname(mod_full)
 
 # Full Path to application directory
 APP_PATH = mod_dirname
@@ -18,9 +18,9 @@ DOMAIN = "www.something.com"
 # Database settings go here
 DATABASE = {
     'host': None,
-    'user' : None,
-    'name' : 'ping.db',
-    'port' : None
+    'user': None,
+    'name': 'ping.db',
+    'port': None
     }
 
 # List of people to notify on problems
@@ -32,8 +32,16 @@ CONTACTS = {
 # Services to be checked and generate new problem events
 SERVICES = {
     'server_ping' : {
-      'request'  : 'get_url' : {'url' : 'https://tinypay.me/ping/server'},
-      'response' : 'json' : { 'type' : 'server',  'up' : 'true' }
+      'request'  : {
+        'action' : 'GET',
+        'options' : {
+          'url' : 'https://tinypay.me/ping/server', 'timeout' : '15'
+          }
+      },
+      'expects' : {
+        'status_code': '200',
+        'json' : 'match': { 'type' : 'server',  'up' : 'true' }
+        }
     }
 }
 
