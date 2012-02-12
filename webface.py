@@ -1,7 +1,7 @@
 from bottle import route, run
 
 @route('/')
-def index(name='World'):
-    return 'shityy'
+def index():
+    return 'service check web interface'
 
 run(host='localhost', port=8080)

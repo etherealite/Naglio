@@ -1,10 +1,6 @@
 import os
 import sys
 import time
-import twilio.rest
-
-
-
 
 
 mod_full = os.path.abspath(__file__)
@@ -13,6 +9,7 @@ mod_dirname = os.path.dirname(path)
 # Full Path to application directory
 APP_PATH = mod_dirname
 
+# Do debbuging stuff
 DEBUG = True
 
 # Domain for twilio callbacks.
@@ -26,20 +23,17 @@ DATABASE = {
     'port' : None
     }
 
-
 # List of people to notify on problems
 CONTACTS = {
-    'matt' : {'phone' : 4154154150},
-    'Doug' : {'phone' : 2342532523}
+    'Evan' : {'phone' : 4152724198},
+    'Dan'  : {'phone' : 2342342341}
     }
 
-
-# services to be checked and generate new problem events
+# Services to be checked and generate new problem events
 SERVICES = {
     'server_ping' : {
-      'request' : 'get_url' : {'url' : 'https://tinypay.me/ping/server'},
+      'request'  : 'get_url' : {'url' : 'https://tinypay.me/ping/server'},
       'response' : 'json' : { 'type' : 'server',  'up' : 'true' }
+    }
 }
-
-
 
