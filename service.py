@@ -1,5 +1,5 @@
 import config
-import urllib2
+from urllib2 import urlopen, HTTPError, URLError
 import json
 
 class Service(object):
@@ -14,7 +14,18 @@ class Service(object):
     self.name = name
     self.request = request
     self.expects = expects
-    self.problem = None
+
+  def problem(self):
+    name = self.name
+    acknowledged = 0
+    kwargs = {
+        'active' : 1,
+        'service_name' : self.name
+        'issue'
+        }
+    problem = Problem.query.filter_by(**kwargs).one()
+    return problem
+
 
   def check(self):
     """
@@ -23,7 +34,7 @@ class Service(object):
     """
     try:
       response = self.request()
-    except (urllib2.HTTPError, urllib2.URLError) as inst:
+    except (HTTPError, URLError) as inst:
       response = inst
     #self.expects(response)
     return response
@@ -43,7 +54,7 @@ class GET(Request):
   def __init__(self, url, timeout=None):
     self.url = url
     self.timeout = timeout
-    self.send = urllib2.urlopen
+    self.send = urlopen
 
   def __call__(self):
     return self.send(self.url, None, self.timeout)
