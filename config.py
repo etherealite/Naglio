@@ -40,7 +40,7 @@ SERVICES = {
       },
       'expects' : {
         'status_code': '200',
-        'json' : 'match': { 'type' : 'server',  'up' : 'true' }
+        'json' : {'match': { 'type' : 'server',  'up' : 'true' }}
         }
     }
 }

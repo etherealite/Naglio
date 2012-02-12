@@ -1,14 +1,14 @@
 #!/usr/bin/python2
+import twilio.rest
 
-services = Services()
+from service import services
 
-services = Build_Services(services)
 for service in services:
   if not service.problem:
     status = service.check()
     if status.issue:
       service.problem = status.issue
-  if service.problem:
+  if service.problems:
     problem = service.problem
     if not problem.acknowledged:
       problem.start_notify()
