@@ -4,18 +4,21 @@ import json
 
 class Service(object):
   """
-  Contains service definition, checking actions and stuff
+  Contains service definition, runs checks on a service by executing
+  a given request and passing in the request to an expects instance.
   """
   def __init__(self, name, request, expects):
     """
-    set name of service, check if there are existing problems for
-    service
+    set name of service, the request required to check the service's
+    status, and the expectation instance to run the checks.
     """
     self.name = name
     self.request = request
     self.expects = expects
 
-  def problem(self):
+"""
+  # safe keeping at the moment.
+  def get_problem(self):
     name = self.name
     acknowledged = 0
     kwargs = {
@@ -25,6 +28,7 @@ class Service(object):
         }
     problem = Problem.query.filter_by(**kwargs).one()
     return problem
+"""
 
 
   def check(self):
@@ -62,13 +66,12 @@ class GET(Request):
 
 class Expects:
   """
-  chain of expections of a given response object
+  chain of expections of a given response object and returns a list
+  of failed checks.
   """
-  def __init__(self, status_code, ):
+  def __init__(self, response):
     self.response = response
 
-  def __call__(self):
-    self.filters
 
 
 def services(source=config.SERVICES):
