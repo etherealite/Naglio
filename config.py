@@ -1,8 +1,9 @@
+"""
+This is the configuration file for the script. 
+"""
 import os
-import sys
-import time
 
-# Find dirname of project directory
+# Find dirname(full path to containing directory) of the project directory
 mod_full = os.path.abspath(__file__)
 mod_dirname = os.path.dirname(mod_full)
 
@@ -35,7 +36,7 @@ SERVICES = {
       'request'  : {
         'action' : 'GET',
         'options' : {
-          'url' : 'https://tinypay.me/ping/server', 'timeout' : '15'
+          'url' : 'https://tinypay.me/ping/server', 'timeout' : '1'
           }
       },
       'expects' : {

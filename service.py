@@ -1,82 +1,59 @@
 """
-This code reads a lot better when I know what it does.
--In memory of Michael Karpeles
+"This code reads a lot better when I know what it does." -Michael Karpeles
 """
-import config
-from urllib2 import urlopen, HTTPError, URLError
 import json
 import sys
+
+from config_tools import namedtupify
+import config
+from requester import *
+
+SERVICES = namedtupify(config.SERVICES, 'Services')
+
 class Service(object):
   """
   Contains service definition, runs checks on a service by executing
-  a given request and passing in the request to an expects instance.
+  a given request and passing in the response to an attached Expects
+  instance.
   """
-  def __init__(self, name, request, expects):
+
+  def __init__(self, name, requester, Response, expects):
     """
     set name of service, the request required to check the service's
     status, and the expectation instance to run the checks.
     """
     self.name = name
-    self.request = request
-    self.expects = expects
 
+    self.requester = requester
+    self.raw_response = None
+
+    self.response = None
+    self.expects = expects
+    self.problem = None
 
   def check(self):
-    """
-    check the service to make sure that the response returned by
-    it's request meets expectaions.
-    """
-    try:
-      response = self.request()
-    except (HTTPError, URLError) as inst:
-      response = inst
-    #self.expects(response)
-    return response
-
-
-
-def reqfactory(request_dic):
-  action = request_dic['action']
-  options = request_dic['options']
-  ReqClass = globals()[action]
-  requester = ReqClass(options)
-  return requester
-
-
-
-
-
-
-class GET(object):
-  """
-  Abstraction of as simple get request
-  """
-  def __init__(self, options):
-    self.url = options['url']
-    self.timeout = int(options['timeout'])
-    self.sender = urlopen
-
-  def __call__(self):
-    return self.sender(self.url, None, self.timeout)
+    pass
 
 
 class Expects:
   """
-  chain of expections of a given response object and returns a list
-  of failed checks.
+  chain rules a given response object is expected to match. Returns a
+  list of failed and passed rules
   """
-  def __init__(self, response):
+  def __init__(self, response, rules):
     self.response = response
+    self.rules = rules
 
 
 class ExpectsRule:
   def __init__(self):
     pass
 
+
 def services(source=config.SERVICES):
     """
-    This code reads a lot better when I know what it does.
-    -Michael Karpeles
+    Factory to generate Service objects from 'source' configuration
+    namedtuple.
     """
     for service_name, definition in source.items():
       request_dict =  definition['request']
@@ -87,4 +64,7 @@ def services(source=config.SERVICES):
       service = Service(service_name, request, expects)
       yield service
 
-myrequest = reqfactory(config.SERVICES['server_ping']['request'])
+
+#myrequest = request(SERVICES.server_ping.request)
+myrequest = GET('http://google.com', 1)
+myresponse = Response(myrequest(), GET)
