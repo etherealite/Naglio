@@ -8,7 +8,7 @@ from urllib2 import urlopen, HTTPError, URLError
 
 class Requester(object):
   """Base class to build new types of Requester classes
-  TODO: set a meta class on this to build a registry
+  :TODO set a meta class on this to build a registry
   """
   pass
 
@@ -17,7 +17,7 @@ class GET(Requester):
   """ Abstraction of as simple get request
   :param url: the url in which to make the request
   :param timeout: the timeout for the request in seconds.
-  Note: This request will follow redirects without exception
+  :Note This request will follow redirects without exception
   """
   non_exceptionals = (HTTPError, URLError)
   def __init__(self, url, timeout=1):
@@ -28,7 +28,7 @@ class GET(Requester):
 
   def sendrequest(self):
     """send the request and return the response.
-    Note: urllib2 throws an exception for all http errorcodes which
+    :Note urllib2 throws an exception for all http errorcodes which
     in this context are not 'exceptional'.
     """
     try:
@@ -45,7 +45,7 @@ class GET(Requester):
 def request(config):
   """create a Requester object from config
   :param config: a namedtuple with action and options attributes.
-  TODO: clarify required structure of 'config' parameter.
+  :TODO clarify required structure of 'config' parameter.
   """
   action = config.action
   options = config.options._asdict()
@@ -53,4 +53,7 @@ def request(config):
   RequesterClass = classes[action]
   requester = RequesterClass(**options)
   return requester
+
+
+myget = GET('http://google.com')
 

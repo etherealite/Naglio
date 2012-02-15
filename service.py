@@ -37,7 +37,7 @@ class Service(object):
 
 class Expects:
   """
-  chain rules a given response object is expected to match. Returns a
+  chain of rules a given response object is expected to match. Returns a
   list of failed and passed rules
   """
   def __init__(self, response, rules):
