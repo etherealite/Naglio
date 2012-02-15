@@ -1,7 +1,11 @@
+"""
+This code reads a lot better when I know what it does.
+-In memory of Michael Karpeles
+"""
 import config
 from urllib2 import urlopen, HTTPError, URLError
 import json
-
+import sys
 class Service(object):
   """
   Contains service definition, runs checks on a service by executing
@@ -15,20 +19,6 @@ class Service(object):
     self.name = name
     self.request = request
     self.expects = expects
-
-"""
-  # safe keeping at the moment.
-  def get_problem(self):
-    name = self.name
-    acknowledged = 0
-    kwargs = {
-        'active' : 1,
-        'service_name' : self.name
-        'issue'
-        }
-    problem = Problem.query.filter_by(**kwargs).one()
-    return problem
-"""
 
 
   def check(self):
@@ -45,23 +35,29 @@ class Service(object):
 
 
 
-class Request:
-  """
-  base request object with which to build request abstractions.
-  """
-  pass
+def reqfactory(request_dic):
+  action = request_dic['action']
+  options = request_dic['options']
+  ReqClass = globals()[action]
+  requester = ReqClass(options)
+  return requester
 
-class GET(Request):
+
+
+
+
+
+class GET(object):
   """
-  Abstraction of a get request
+  Abstraction of as simple get request
   """
-  def __init__(self, url, timeout=None):
-    self.url = url
-    self.timeout = timeout
-    self.send = urlopen
+  def __init__(self, options):
+    self.url = options['url']
+    self.timeout = int(options['timeout'])
+    self.sender = urlopen
 
   def __call__(self):
-    return self.send(self.url, None, self.timeout)
+    return self.sender(self.url, None, self.timeout)
 
 
 class Expects:
@@ -73,6 +69,9 @@ class Expects:
     self.response = response
 
 
+class ExpectsRule:
+  def __init__(self):
+    pass
 
 def services(source=config.SERVICES):
     """
@@ -81,9 +80,6 @@ def services(source=config.SERVICES):
     """
     for service_name, definition in source.items():
       request_dict =  definition['request']
-      if not request_dict['action'] is not 'GET':
-        raise 'only \GET\' request is implemented'
-      action = requst_dict['action']
 
       request = GET(action['ur'], action['timeout'])
       expects = None
@@ -91,6 +87,4 @@ def services(source=config.SERVICES):
       service = Service(service_name, request, expects)
       yield service
 
-myget = GET('http://google.com:32987', 1)
-myservice = Service('myservice', myget, None)
-
+myrequest = reqfactory(config.SERVICES['server_ping']['request'])
