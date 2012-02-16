@@ -12,6 +12,3 @@ p.start()
 #p.join()
 #run(host='localhost', port=8080)
 
-while True:
-  print "fuckity"
-  time.sleep(2)

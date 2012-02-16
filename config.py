@@ -1,12 +1,13 @@
 """
 This is the configuration file for the script. 
 """
-import os
+from os import environ, path
 
 # Find dirname(full path to containing directory) of the project directory
-mod_full = os.path.abspath(__file__)
-mod_dirname = os.path.dirname(mod_full)
+mod_full = path.abspath(__file__)
+mod_dirname = path.dirname(mod_full)
 
+#
 # Full Path to application directory
 APP_PATH = mod_dirname
 
@@ -16,19 +17,19 @@ DEBUG = True
 # Domain for twilio callbacks.
 DOMAIN = "www.something.com"
 
-# Database settings go here
-DATABASE = {
-    'host': None,
-    'user': None,
-    'name': 'ping.db',
-    'port': None
+# Twilio authentication
+TWILIO = {
+    'ACCOUNT_SID' : environ['ACCOUNT_SID'],
+    'AUTH_TOKEN'  : environ['AUTH_TOKEN']
     }
+
 
 # List of people to notify on problems
 CONTACTS = {
     'Evan' : {'phone' : 4152724198},
     'Dan'  : {'phone' : 2342342341}
     }
+
 
 # Services to be checked and generate new problem events
 SERVICES = {
