@@ -35,20 +35,6 @@ class Service(object):
     pass
 
 
-class Expects:
-  """
-  chain of rules a given response object is expected to match. Returns a
-  list of failed and passed rules
-  """
-  def __init__(self, response, rules):
-    self.response = response
-    self.rules = rules
-
-
-class ExpectsRule:
-  def __init__(self):
-    pass
-
 
 def services(source=config.SERVICES):
     """

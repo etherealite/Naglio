@@ -23,6 +23,7 @@ class GET(Requester):
   def __init__(self, url, timeout=1):
     self.url = url
     self.timeout = 1
+    request_sent = False
     self.raw_response = None
     self.opener = urlopen
 
@@ -36,6 +37,7 @@ class GET(Requester):
     except self.non_exceptionals as excep_resp:
       raw_response = excep_resp
     self.raw_response = raw_response
+    self.request_sent = True
 
   def __call__(self):
     self.sendrequest()
