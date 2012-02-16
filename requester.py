@@ -39,7 +39,7 @@ class GET(Requester):
     self.raw_response = raw_response
     self.request_sent = True
 
-  def __call__(self):
+  def raw_response(self):
     self.sendrequest()
     return self.raw_response
 
@@ -55,7 +55,4 @@ def request(config):
   RequesterClass = classes[action]
   requester = RequesterClass(**options)
   return requester
-
-
-myget = GET('http://google.com')
 

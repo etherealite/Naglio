@@ -47,7 +47,7 @@ class Response(object):
 
     #determine if a redirect was followed
     self.followed_redirect = False
-    if requester.url is not raw.geturl():
+    if self.requester.url is not raw.geturl():
       self.followed_redirect = True
     #if the raw respones is an urllib2 error act accordingly.
     if isinstance(raw, non_excepts):

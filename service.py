@@ -1,14 +1,7 @@
-"""
-"This code reads a lot better when I know what it does." -Michael Karpeles
-"""
-import json
-import sys
+from requester import GET
+from response import Response
+from expects import Expects, StatusCode
 
-from config_tools import namedtupify
-import config
-from requester import *
-
-SERVICES = namedtupify(config.SERVICES, 'Services')
 
 class Service(object):
   """
@@ -17,26 +10,27 @@ class Service(object):
   instance.
   """
 
-  def __init__(self, name, requester, Response, expects):
+  def __init__(self, name, requester, ResponseCls, expects):
     """
     set name of service, the request required to check the service's
     status, and the expectation instance to run the checks.
     """
     self.name = name
-
     self.requester = requester
-    self.raw_response = None
-
-    self.response = None
+    self.ResponseCls = ResponseCls
     self.expects = expects
-    self.problem = None
+
+    self.problems = None
 
   def check(self):
-    pass
+    raw_response = self.requester.raw_response()
+    response = ResponseCls(raw_response, self.requester)
+    self.expects.run_rules(response)
 
 
 
-def services(source=config.SERVICES):
+
+def services(source):
     """
     Factory to generate Service objects from 'source' configuration
     namedtuple.
@@ -51,6 +45,3 @@ def services(source=config.SERVICES):
       yield service
 
 
-#myrequest = request(SERVICES.server_ping.request)
-myrequest = GET('http://google.com', 1)
-myresponse = Response(myrequest(), GET)
