@@ -2,6 +2,8 @@
 This is the configuration file for the script. 
 """
 from os import environ, path
+from config_tools import namedtupify
+
 
 # Find dirname(full path to containing directory) of the project directory
 mod_full = path.abspath(__file__)
@@ -15,7 +17,7 @@ APP_PATH = mod_dirname
 DEBUG = True
 
 # Domain for twilio callbacks.
-DOMAIN = "www.something.com"
+DOMAIN = "http://3bpe.localtunnel.com"
 
 # Twilio authentication
 TWILIO = {
@@ -43,7 +45,8 @@ SERVICES = {
       'expects' : {
         'status_code': '200',
         'json' : {'match': { 'type' : 'server',  'up' : 'true' }}
-        }
+        },
+      'cycle_time' : 5
     }
 }
 

@@ -7,7 +7,7 @@ from collections import namedtuple
 :parm dic: the dcitionary to convert
 :parm name: class name for the generated tuple.
 """
-def namedtupify(dic, name):
+def namedtupify(name, dic):
   for k, v in dic.items():
     if isinstance(v, dict):
       dic[k] = namedtupify(v, k)
