@@ -1,5 +1,4 @@
 from requester import GET
-from response import Response
 from expects import Expects, StatusCode
 
 
@@ -10,14 +9,13 @@ class Service(object):
   instance.
   """
 
-  def __init__(self, name, requester, ResponseCls, expects):
+  def __init__(self, name, requester, expects):
     """
     set name of service, the request required to check the service's
     status, and the expectation instance to run the checks.
     """
     self.name = name
     self.requester = requester
-    self.ResponseCls = ResponseCls
     self.expects = expects
 
     self.problems = None

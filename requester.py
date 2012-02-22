@@ -2,7 +2,7 @@
 Requesters are an encapsulation of the more fundamental components.
 of building an object to perform request on remote services.
 """
-
+from response import UrlLibHTTP
 
 from urllib2 import urlopen, HTTPError, URLError
 
@@ -13,7 +13,7 @@ class Requester(object):
   pass
 
 
-class GET(Requester):
+class GET(Requester, UrlLibHTTP):
   """ Abstraction of as simple get request
   :param url: the url in which to make the request
   :param timeout: the timeout for the request in seconds.
@@ -23,25 +23,26 @@ class GET(Requester):
   def __init__(self, url, timeout=1):
     self.url = url
     self.timeout = 1
-    request_sent = False
+
     self.raw_response = None
+
     self.opener = urlopen
+
 
   def sendrequest(self):
     """send the request and return the response.
     :Note urllib2 throws an exception for all http errorcodes which
     in this context are not 'exceptional'.
     """
+    self.reset() #response adaptor reset.
     try:
       raw_response = self.opener(self.url, None, self.timeout)
     except self.non_exceptionals as excep_resp:
       raw_response = excep_resp
     self.raw_response = raw_response
-    self.request_sent = True
+    self.process_raw_response()
+    self.raw_response = None
 
-  def raw_response(self):
-    self.sendrequest()
-    return self.raw_response
 
 
 def request(config):
