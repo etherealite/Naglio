@@ -17,36 +17,19 @@ APP_PATH = mod_dirname
 DEBUG = True
 
 # Domain for twilio callbacks.
-DOMAIN = "http://3bpe.localtunnel.com"
+DOMAIN = "http://52ns.localtunnel.com"
 
 # Twilio authentication
 TWILIO = {
     'ACCOUNT_SID' : environ['ACCOUNT_SID'],
-    'AUTH_TOKEN'  : environ['AUTH_TOKEN']
+    'AUTH_TOKEN'  : environ['AUTH_TOKEN'],
+    'CALL_FROM'   : '+14155992671'
     }
 
 
 # List of people to notify on problems
-CONTACTS = {
-    'Evan' : {'phone' : 4152724198},
-    'Dan'  : {'phone' : 2342342341}
-    }
-
-
-# Services to be checked and generate new problem events
-SERVICES = {
-    'server_ping' : {
-      'request'  : {
-        'action' : 'GET',
-        'options' : {
-          'url' : 'https://tinypay.me/ping/server', 'timeout' : '1'
-          }
-      },
-      'expects' : {
-        'status_code': '200',
-        'json' : {'match': { 'type' : 'server',  'up' : 'true' }}
-        },
-      'cycle_time' : 5
-    }
-}
+CONTACTS = (
+    ('Evan', {'phone' : 4152724198}),
+    #('Dan', {'phone' : 2342342341})
+    )
 

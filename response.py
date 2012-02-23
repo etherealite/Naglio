@@ -45,6 +45,6 @@ class UrlLibHTTP(Response):
       #only urllib.addinfourl type should be now be possible
       self.status_code = raw.code
       self.headers = dict(raw.headers)
-      self.body = raw.readlines()
+      self.body = "".join(raw.readlines())
 
 

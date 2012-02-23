@@ -1,45 +1,37 @@
+
+"""
+"This code reads a lot better when I know what it does."
+-Michael Karpeles
+"""
+#from service import Service
 from requester import GET
-from expects import Expects, StatusCode
+from expects import Expects, StatusCode, Json
 
+class ServerPing(object):
+  name = "Tiny Pay Server Ping"
+  requester = GET('https://tinypay.me/ping/server', 1)
+  rules = [StatusCode(200), Json({u'type':u'server', u'up':True})]
+  expects = Expects(rules)
+  problems = []
+  msg = "starting up"
+  @classmethod
+  def check(cls):
+    cls.requester.sendrequest()
+    cls.expects.runrules(cls.requester)
+    cls.problems = cls.expects.failures
 
-class Service(object):
-  """
-  Contains service definition, runs checks on a service by executing
-  a given request and passing in the response to an attached Expects
-  instance.
-  """
+    if cls.problems:
+      cls.msg = "{} has detected problems:\n".format(cls.name)
+      probnum = 1
+      for failure in cls.problems:
+        cls.msg += "Problem number {}, {}, ".format(probnum, failure.__class__.__name__)
+        cls.msg += failure.msg
+        cls.msg += ".\n"
+        probnum += 1
+    else:
+      cls.msg = "{}, all system go.".format(cls.name)
 
-  def __init__(self, name, requester, expects):
-    """
-    set name of service, the request required to check the service's
-    status, and the expectation instance to run the checks.
-    """
-    self.name = name
-    self.requester = requester
-    self.expects = expects
-
-    self.problems = None
-
-  def check(self):
-    raw_response = self.requester.raw_response()
-    response = ResponseCls(raw_response, self.requester)
-    self.expects.run_rules(response)
-
-
-
-
-def services(source):
-    """
-    Factory to generate Service objects from 'source' configuration
-    namedtuple.
-    """
-    for service_name, definition in source.items():
-      request_dict =  definition['request']
-
-      request = GET(action['ur'], action['timeout'])
-      expects = None
-      #expects_dict = definition['expects']
-      service = Service(service_name, request, expects)
-      yield service
-
-
+if __name__ == '__main__':
+  ServerPing.check()
+  print ServerPing.problems
+  print ServerPing.msg
